@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{lecture.title}} - Chademy</title>
+</head>
+<body>
+    <h1>You are watching {{lecture.title}}</h1>
+    <br>
+    <video src="/media/{{lecture.videoFile.name}}" controls autoplay></video>
+    <br>
+    <p>
+        {{lecture.description}}
+    </p>
+    <p>{{lecture.viewCount}} Views | <i>{{lecture.dateUploaded}}</i> | <a href="/course?id={{lecture.partOfCourse.id}}">{{lecture.partOfCourse.title}}</a></p>
+</body>
+</html>
