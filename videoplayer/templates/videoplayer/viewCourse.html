@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{course.title}} - Chademy</title>
+</head>
+<body>
+    <div>
+        <p>Title: {{course.title}}</p>
+        <p>Date of Creation: {{course.dateCreated}}</p>
+        <p>Private: {{course.isPrivate}}</p>
+        <p>Price: {{course.price}}</p>
+        <p>Videos: <br> 
+            <ul>
+                {% for video in course.lectures.all %}    
+                <li>
+                    <p>Title: {{video.title}}</p>
+                    <a href="/lecture?id={{video.id}}"><button>Watch</button></a>
+                </li>
+                {% endfor %}
+            </ul>
+            </p>
+        
+    </div>
+</body>
+</html>

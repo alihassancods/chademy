@@ -1,11 +1,25 @@
 from django.shortcuts import render,HttpResponse
-
+from . import models
 # Create your views here.
 def allCourses(request):
-    return HttpResponse("All Courses page")
+    allCoursesInDatabase = models.Course.objects.all()
+    context = {
+        "courses":allCoursesInDatabase,
+    }
+    return render(request,"videoplayer/courses.html",context=context)
 
 def viewCourse(request):
-    return HttpResponse("View the Course page")
+    courseID = request.GET.get("id")
+    course = models.Course.objects.get(id=courseID)
+    context = {
+        "course": course,
+    }
+    return render(request,"videoplayer/viewCourse.html",context=context)
 
 def watchLecture(request):
-    return HttpResponse("Watch any lecture of a course")
+    lectureID = request.GET.get("id")
+    lecture = models.Lecture.objects.get(id=lectureID)
+    context = {
+        "lecture":lecture
+    }
+    return render(request,"videoplayer/watchLecture.html",context=context)
