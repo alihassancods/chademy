@@ -18,9 +18,13 @@ Including another URLconf
 from django.urls import path
 from . import views
 
-APP_NAME = "videoplayer"
+app_name = "videoplayer"
 
 urlpatterns = [
+    path('', views.allCourses, name='all_courses'),
+    path('course', views.viewCourse, name='view_course'),
+    path('lecture', views.watchLecture, name='watch_lecture'),
+    path('stream/<int:lecture_id>/', views.stream_video, name='stream_video'),
     path("courses/",views.allCourses,name="allCourses"),
     path("course/",views.viewCourse,name="viewCourse"),
     path("lecture/",views.watchLecture,name="watchLecture"),
