@@ -5,7 +5,9 @@ from django.contrib.auth.decorators import login_required
 from django.conf import settings
 from wsgiref.util import FileWrapper
 import os
+
 from . import models
+from .forms import CourseForm, LectureForm
 
 # Create your views here.
 def allCourses(request):
@@ -87,3 +89,27 @@ def stream_video(request, lecture_id):
         return response
     except models.Lecture.DoesNotExist:
         return HttpResponseForbidden("Access Denied")
+    
+
+def createChooser(request):
+    return render(request, "videoplayer/create.html")
+
+def createCourse(request):
+    if request.method == 'POST':
+        form = CourseForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return render(request, "videoplayer/createCourse.html", {"form": form, "success": True})
+    else:
+        form = CourseForm()
+    return render(request, "videoplayer/createCourse.html", {"form": form})
+
+def createLecture(request):
+    if request.method == 'POST':
+        form = LectureForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            return render(request, "videoplayer/createLecture.html", {"form": form, "success": True})
+    else:
+        form = LectureForm()
+    return render(request, "videoplayer/createLecture.html", {"form": form})

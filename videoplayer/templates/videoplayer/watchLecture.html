@@ -135,6 +135,18 @@
         .watch-btn:hover {
             background-color: #65b8ff;
         }
+        .videoinlist{
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding-left: 15px;
+        }
+        .thumbnail{
+            width: fit-content;
+        }
+        .thumbnail img{
+            aspect-ratio: 16/9;
+        }
     </style>
 </head>
 <body>
@@ -163,7 +175,10 @@
             <ul class="playlist-items">
                 {% for video in lecture.partOfCourse.lectures.all %}
                 <li class="playlist-item {% if video.id == lecture.id %}active{% endif %}">
-                    <div>
+                    <div class="videoinlist">
+                        <div class="thumbnail">
+                            <img src="/media/{{video.thumbnail.name}}" alt="">
+                        </div>
                         <p class="playlist-item-title">{{video.title}}</p>
                         <a href="/lecture?id={{video.id}}">
                             <button class="watch-btn">Watch</button>
