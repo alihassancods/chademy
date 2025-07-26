@@ -1,0 +1,116 @@
+<!-- templates/chat/group_ws.html -->
+{% extends "account/base.html" %}
+{% block content %}
+<style>
+    .chat-container {
+        max-width: 600px;
+        margin: 40px auto;
+        background: #f8fafc;
+        border-radius: 12px;
+        box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+        padding: 24px 18px 18px 18px;
+    }
+    .chat-header {
+        font-size: 1.5rem;
+        color: #1976d2;
+        margin-bottom: 18px;
+        text-align: center;
+    }
+    #chat-log {
+        height: 320px;
+        border: 1.5px solid #1976d2;
+        border-radius: 8px;
+        background: #fff;
+        overflow-y: auto;
+        padding: 12px;
+        margin-bottom: 16px;
+        font-size: 1.08rem;
+    }
+    .chat-message {
+        margin-bottom: 10px;
+        padding: 6px 10px;
+        border-radius: 6px;
+        background: #e3f0ff;
+        display: flex;
+        align-items: center;
+    }
+    .chat-author {
+        font-weight: 700;
+        color: #1976d2;
+        margin-right: 8px;
+    }
+    .chat-time {
+        font-size: 0.85em;
+        color: #888;
+        margin-left: 8px;
+    }
+    .chat-input-row {
+        display: flex;
+        gap: 10px;
+    }
+    #chat-message-input {
+        flex: 1;
+        padding: 10px;
+        border-radius: 6px;
+        border: 1.5px solid #1976d2;
+        font-size: 1rem;
+    }
+    #chat-message-submit {
+        background: #1976d2;
+        color: #fff;
+        border: none;
+        border-radius: 6px;
+        padding: 10px 22px;
+        font-size: 1rem;
+        cursor: pointer;
+        transition: background 0.2s;
+    }
+    #chat-message-submit:hover {
+        background: #1256a3;
+    }
+</style>
+
+<div class="chat-container">
+    <div class="chat-header">#{{ group.name }}</div>
+    <div id="chat-log"></div>
+    <div class="chat-input-row">
+        <input id="chat-message-input" type="text" placeholder="Type your message..." autocomplete="off">
+        <button id="chat-message-submit">Send</button>
+    </div>
+</div>
+
+<script>
+const roomName = "{{ group.name }}";
+const chatLog = document.getElementById('chat-log');
+const chatInput = document.getElementById('chat-message-input');
+const chatButton = document.getElementById('chat-message-submit');
+
+const chatSocket = new WebSocket(
+    'ws://'
+    + window.location.host
+    + `/ws/chat/group/${roomName}/`
+);
+
+chatSocket.onmessage = function(e) {
+    const data = JSON.parse(e.data);
+    const msgDiv = document.createElement('div');
+    msgDiv.className = 'chat-message';
+    msgDiv.innerHTML = `<span class="chat-author">${data.author}</span>: <span>${data.text}</span> <span class="chat-time">${data.time ? data.time : ''}</span>`;
+    chatLog.appendChild(msgDiv);
+    chatLog.scrollTop = chatLog.scrollHeight;
+};
+
+function sendMessage() {
+    const message = chatInput.value.trim();
+    if (message) {
+        chatSocket.send(JSON.stringify({'message': message}));
+        chatInput.value = '';
+    }
+}
+
+chatButton.onclick = sendMessage;
+chatInput.addEventListener('keyup', function(e) {
+    if (e.key === 'Enter') sendMessage();
+});
+</script>
+{% endblock %}

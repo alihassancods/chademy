@@ -28,7 +28,7 @@ urlpatterns = [
     path('accounts/google/login/callback/',
          google_views.oauth2_callback, name='google_callback'),
     path('accounts/logout/', LogoutView.as_view(), name='account_logout'),
-
+    path("chat/", include("chat.urls"))
 ]
 
 # Serve media files during development
