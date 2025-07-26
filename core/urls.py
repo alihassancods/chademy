@@ -19,10 +19,16 @@ from django.contrib import admin
 from django.urls import path, include
 # from django.conf import settings
 # from django.conf.urls.static import static
-
+from allauth.socialaccount.providers.google import views as google_views
+from allauth.account.views import LogoutView
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path("",include("videoplayer.urls")),
+    path("", include("videoplayer.urls")),
+    path('accounts/google/login/', google_views.oauth2_login, name='google_login'),
+    path('accounts/google/login/callback/',
+         google_views.oauth2_callback, name='google_callback'),
+    path('accounts/logout/', LogoutView.as_view(), name='account_logout'),
+
 ]
 
 # Serve media files during development
