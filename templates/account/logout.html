@@ -1,0 +1,82 @@
+{# templates/account/logout.html #}
+{% extends "account/base.html" %}
+{% load static %}
+
+{% block extra_head %}
+  <style>
+    /* ========= override-allauth ========= */
+    body {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      margin: 0;
+      font-family: system-ui, sans-serif;
+      background: #f5f7fa;
+    }
+
+    .logout-card {
+      width: 100%;
+      max-width: 380px;
+      padding: 2.5rem 2rem;
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, .08);
+      text-align: center;
+    }
+
+    .logout-card h2 {
+      margin-top: 0;
+      font-size: 1.5rem;
+      color: #1a202c;
+    }
+
+    .logout-card p {
+      color: #4a5568;
+      margin-bottom: 1.75rem;
+    }
+
+    .btn {
+      display: inline-block;
+      padding: .75rem 1.5rem;
+      border: none;
+      border-radius: 6px;
+      font-size: 1rem;
+      cursor: pointer;
+      text-decoration: none;
+    }
+
+    .btn-primary {
+      background: #2563eb;
+      color: #fff;
+      transition: background .2s;
+    }
+
+    .btn-primary:hover {
+      background: #1d4ed8;
+    }
+
+    .btn-secondary {
+      background: transparent;
+      color: #4a5568;
+      margin-left: 1rem;
+    }
+
+    .btn-secondary:hover {
+      text-decoration: underline;
+    }
+  </style>
+{% endblock %}
+
+{% block content %}
+  <div class="logout-card">
+    <h2>Leaving already?</h2>
+    <p>This custom page replaces the default <em>django-allauth</em> logout screen.</p>
+
+    <form method="post" action="{% url 'account_logout' %}">
+      {% csrf_token %}
+      <button type="submit" class="btn btn-primary">Sign out</button>
+      <a href="/" class="btn btn-secondary">Cancel</a>
+    </form>
+  </div>
+{% endblock %}
