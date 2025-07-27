@@ -4,7 +4,8 @@ from django.views.decorators.cache import never_cache
 from .models import UserProfile
 from .forms import CategoryForm
 SESSION_CATEGORY_KEY = "onboarding_category"
-
+def home(request):
+    return render(request,"main/home.html")
 @never_cache
 def category_picker(request):
     if request.method == "POST":
