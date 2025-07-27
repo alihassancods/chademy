@@ -10,6 +10,7 @@ class Course(models.Model):
     isPrivate = models.BooleanField(default=False)
     price = models.IntegerField(default=0)
     owner = models.ForeignKey(User,on_delete=models.CASCADE,related_name="createdCourses")
+    accessibleBy = models.ManyToManyField(User,related_name="accessibleCourses",null=True)
     def __str__(self):
         return self.title    
 class Lecture(models.Model):

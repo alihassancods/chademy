@@ -114,6 +114,8 @@ def createCourse(request):
             course = form.save(commit=False)
             course.owner = request.user
             course.save()
+            course.accessibleBy.add(request.user)
+            course.save()
             return render(request, "videoplayer/createCourse.html", {"form": form, "success": True})
     else:
         form = CourseForm()
