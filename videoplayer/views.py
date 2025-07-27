@@ -1,4 +1,4 @@
-from django.shortcuts import render, HttpResponse
+from django.shortcuts import render, redirect
 from django.http import FileResponse, HttpResponseForbidden
 from django.views.decorators.clickjacking import xframe_options_exempt
 from django.contrib.auth.decorators import login_required
@@ -10,12 +10,15 @@ from . import models
 from .forms import CourseForm, LectureForm
 
 # Create your views here.
+
+
 def allCourses(request):
     allCoursesInDatabase = models.Course.objects.all()
     context = {
-        "courses":allCoursesInDatabase,
+        "courses": allCoursesInDatabase,
     }
-    return render(request,"videoplayer/courses.html",context=context)
+    return render(request, "videoplayer/courses.html", context=context)
+
 
 def viewCourse(request):
     courseID = request.GET.get("id")
@@ -23,15 +26,20 @@ def viewCourse(request):
     context = {
         "course": course,
     }
-    return render(request,"videoplayer/viewCourse.html",context=context)
+    return render(request, "videoplayer/viewCourse.html", context=context)
+
 
 def watchLecture(request):
+    if not request.user.is_authenticated:
+        return redirect("google_login")
+
     lectureID = request.GET.get("id")
     lecture = models.Lecture.objects.get(id=lectureID)
     context = {
         "lecture": lecture
     }
-    return render(request,"videoplayer/watchLecture.html",context=context)
+    return render(request, "videoplayer/watchLecture.html", context=context)
+
 
 @xframe_options_exempt
 def stream_video(request, lecture_id):
@@ -42,50 +50,51 @@ def stream_video(request, lecture_id):
         path = lecture.videoFile.path
         print(f"Video path: {path}")  # Debug print
         print(f"Video name: {lecture.videoFile.name}")  # Debug print
-        
+
         # Get the file size
         file_size = os.path.getsize(path)
-        
+
         # Determine content type based on file extension
         content_type = 'video/webm' if path.lower().endswith('.webm') else 'video/mp4'
-        
+
         # Handle range requests
         range_header = request.META.get('HTTP_RANGE', '').strip()
         range_re = range_header.replace('bytes=', '').split('-')
         range_start = int(range_re[0]) if range_re[0] else 0
-        range_end = min(int(range_re[1]) if range_re[1] and range_re[1].isdigit() else file_size - 1, file_size - 1)
-        
+        range_end = min(int(range_re[1]) if range_re[1] and range_re[1].isdigit(
+        ) else file_size - 1, file_size - 1)
+
         # Open file in binary mode
         if not os.path.exists(path):
             print(f"File not found: {path}")  # Debug print
             return HttpResponseForbidden("Video file not found")
 
         file_obj = open(path, 'rb')
-        
+
         if range_start > 0:
             file_obj.seek(range_start)
-        
+
         content_length = range_end - range_start + 1
-        
+
         response = FileResponse(
             FileWrapper(file_obj),
             content_type='video/mp4',  # Set to video/mp4 for now
             status=206 if range_header else 200,
         )
-        
+
         # Set response headers
         response['Accept-Ranges'] = 'bytes'
         if range_header:
             response['Content-Range'] = f'bytes {range_start}-{range_end}/{file_size}'
         response['Content-Length'] = str(content_length)
-        
+
         # Add security headers
         response['X-Content-Type-Options'] = 'nosniff'
         response['Content-Disposition'] = 'inline'
         response['Cache-Control'] = 'no-cache, no-store, must-revalidate'
         response['Pragma'] = 'no-cache'
         response['Expires'] = '0'
-        
+
         return response
     except models.Lecture.DoesNotExist:
         return HttpResponseForbidden("Access Denied")
