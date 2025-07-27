@@ -5,6 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import get_user
 from django.conf import settings
 from wsgiref.util import FileWrapper
+from transcriptor.views import transcribe
 import os
 
 from . import models
@@ -124,6 +125,7 @@ def createCourse(request):
             course.save()
             from chat.models import Group
             group = Group.objects.create(name=course.uuid)
+            
             return render(request, "videoplayer/createCourse.html", {"form": form, "success": True})
     else:
         form = CourseForm()
@@ -136,9 +138,24 @@ def createLecture(request):
         form = LectureForm(request.POST, request.FILES)
         # Filter courses to only those owned by the current user
         form.fields['partOfCourse'].queryset = models.Course.objects.filter(owner=request.user)
+        import threading
         if form.is_valid():
-            form.save()
+            lecture = form.save()
             # return render(request, "videoplayer/createLecture.html", {"form": form, "success": True})
+            def _transcribe():
+                video_path = lecture.videoFile.path
+                audio_path = os.path.join(
+                    settings.MEDIA_ROOT,
+                    "lectures/audio",
+                    f"{os.path.splitext(os.path.basename(video_path))[0]}.mp3",
+                )
+                os.makedirs(os.path.dirname(audio_path), exist_ok=True)
+
+                text = transcribe(video_path, audio_path)
+                lecture.transcriptionData = text
+                lecture.save(update_fields=["transcriptionData"])
+
+            threading.Thread(target=_transcribe, daemon=True).start()
             return redirect("main:dashboard")
     else:
         form = LectureForm()

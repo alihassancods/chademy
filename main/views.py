@@ -5,7 +5,7 @@ from .models import UserProfile
 from .forms import CategoryForm
 SESSION_CATEGORY_KEY = "onboarding_category"
 def home(request):
-    return render(request,"main/home.html")
+    return render(request,"main/index.html")
 @never_cache
 def category_picker(request):
     if request.method == "POST":
