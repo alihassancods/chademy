@@ -17,7 +17,7 @@ def create_checkout_session(request, course_uuid):
     course = get_object_or_404(Course, uuid=course_uuid)
     product = stripe.Product.create(name=course.title)
     price = stripe.Price.create(
-        unit_amount=int(course.price * 100),
+        unit_amount=int(float(course.price) * 100),
         currency='usd',
         product=product.id,
     )
