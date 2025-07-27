@@ -5,9 +5,13 @@ from django.contrib.auth import get_user_model
 User = get_user_model()
 
 class Course(models.Model):
+    import uuid
     title = models.CharField(max_length=120)
     dateCreated = models.DateField(auto_now_add=True)
     isPrivate = models.BooleanField(default=False)
+    price = models.FloatField(default=0)
+    stripe_price_id = models.CharField(max_length=120, default=None, null=True, blank=True)
+    uuid = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     price = models.IntegerField(default=0)
     owner = models.ForeignKey(User,on_delete=models.CASCADE,related_name="createdCourses")
     accessibleBy = models.ManyToManyField(User,related_name="accessibleCourses",null=True)

@@ -33,6 +33,7 @@ urlpatterns = [
     path('accounts/logout/', LogoutView.as_view(), name='account_logout'),
     path("chat/", include("chat.urls")),
     path("payments/", include("payments.urls")),
+    path("app/", include("main.urls")),
 
 ]
 

@@ -38,7 +38,6 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'videoplayer',
-
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
@@ -46,8 +45,10 @@ INSTALLED_APPS = [
     'transcriptor',
     'channels',
     'chat',
-    'payments'
+    'payments',
+    "main.apps.MainConfig",   # ← use the dotted path, NOT just "main"
 ]
+
 CHANNEL_LAYERS = {
     "default": {
         "BACKEND": "channels.layers.InMemoryChannelLayer"
