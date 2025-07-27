@@ -38,7 +38,6 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'videoplayer',
-
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
@@ -46,7 +45,8 @@ INSTALLED_APPS = [
     'transcriptor',
     'channels',
     'chat',
-    'payments'
+    'payments',
+    'main'
 ]
 CHANNEL_LAYERS = {
     "default": {
