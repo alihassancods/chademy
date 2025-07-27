@@ -45,7 +45,8 @@ INSTALLED_APPS = [
     'allauth.socialaccount.providers.google',
     'transcriptor',
     'channels',
-    'chat'
+    'chat',
+    'payments'
 ]
 CHANNEL_LAYERS = {
     "default": {
@@ -130,7 +131,11 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
+from decouple import config
+STRIPE_PUBLISHABLE_KEY = config('STRIPE_PUBLISHABLE_KEY')
+STRIPE_SECRET_KEY = config('STRIPE_SECRET_KEY')
+# STRIPE_PRICE_ID = config('STRIPE_PRICE_ID')
+STRIPE_WEBHOOK_SECRET = config('STRIPE_WEBHOOK_SECRET')
 # Internationalization
 # https://docs.djangoproject.com/en/5.2/topics/i18n/
 

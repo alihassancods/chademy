@@ -168,6 +168,7 @@
                 <h3>{{ course.title }}</h3>
                 <p>Price: <b>{{ course.price }}</b></p>
                 <a href="/course?id={{ course.id }}" class="btn">View Course</a>
+                <a href="{% url 'buy-course' course.id %}">Buy this course</a>
             </div>
             {% endfor %}
         </div>
