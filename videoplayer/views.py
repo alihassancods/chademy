@@ -32,9 +32,10 @@ def viewCourse(request):
 def watchLecture(request):
     if not request.user.is_authenticated:
         return redirect("google_login")
-
     lectureID = request.GET.get("id")
     lecture = models.Lecture.objects.get(id=lectureID)
+    if not request.user in lecture.partOfCourse.accessibleBy.all():
+        return HttpResponseForbidden("Get out of here. First buy the course and then come back here...")
     context = {
         "lecture": lecture
     }
@@ -111,7 +112,11 @@ def createCourse(request):
     if request.method == 'POST':
         form = CourseForm(request.POST)
         if form.is_valid():
-            form.save()
+            course = form.save(commit=False)
+            course.owner = request.user
+            course.save()
+            course.accessibleBy.add(request.user)
+            course.save()
             return render(request, "videoplayer/createCourse.html", {"form": form, "success": True})
     else:
         form = CourseForm()
@@ -122,9 +127,12 @@ def createLecture(request):
         return redirect("google_login")
     if request.method == 'POST':
         form = LectureForm(request.POST, request.FILES)
+        # Filter courses to only those owned by the current user
+        form.fields['partOfCourse'].queryset = models.Course.objects.filter(owner=request.user)
         if form.is_valid():
             form.save()
             return render(request, "videoplayer/createLecture.html", {"form": form, "success": True})
     else:
         form = LectureForm()
+        form.fields['partOfCourse'].queryset = models.Course.objects.filter(owner=request.user)
     return render(request, "videoplayer/createLecture.html", {"form": form})
