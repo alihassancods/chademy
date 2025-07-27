@@ -46,8 +46,9 @@ INSTALLED_APPS = [
     'channels',
     'chat',
     'payments',
-    'main'
+    "main.apps.MainConfig",   # ← use the dotted path, NOT just "main"
 ]
+
 CHANNEL_LAYERS = {
     "default": {
         "BACKEND": "channels.layers.InMemoryChannelLayer"
