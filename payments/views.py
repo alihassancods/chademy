@@ -9,12 +9,19 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views import View
 from django.http import HttpResponse, JsonResponse
 from django.utils.decorators import method_decorator
-from .models import Course, PaymentHistory
-
+from .models import PaymentHistory
+from videoplayer.models import Course
 stripe.api_key = settings.STRIPE_SECRET_KEY
 
-def create_checkout_session(request, course_id):
-    course = get_object_or_404(Course, id=course_id)
+def create_checkout_session(request, course_uuid):
+    course = get_object_or_404(Course, uuid=course_uuid)
+    product = stripe.Product.create(name=course.title)
+    price = stripe.Price.create(
+        unit_amount=int(course.price * 100),
+        currency='usd',
+        product=product.id,
+    )
+    course.stripe_price_id = price.id
     session = stripe.checkout.Session.create(
         payment_method_types=['card'],
         line_items=[{
@@ -22,7 +29,7 @@ def create_checkout_session(request, course_id):
             'quantity': 1,
         }],
         mode='payment',
-        metadata={'course_id': course.id},
+        metadata={'course_id': course.uuid},
         success_url=request.build_absolute_uri('/payments/success/'),
         cancel_url=request.build_absolute_uri('/payments/cancel/'),
     )
