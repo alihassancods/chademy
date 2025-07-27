@@ -1,7 +1,8 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect,get_object_or_404
 from django.http import FileResponse, HttpResponseForbidden
 from django.views.decorators.clickjacking import xframe_options_exempt
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth import get_user
 from django.conf import settings
 from wsgiref.util import FileWrapper
 import os
@@ -32,14 +33,18 @@ def viewCourse(request):
 def watchLecture(request):
     if not request.user.is_authenticated:
         return redirect("google_login")
-    lectureID = request.GET.get("id")
-    lecture = models.Lecture.objects.get(id=lectureID)
-    if not request.user in lecture.partOfCourse.accessibleBy.all():
-        return HttpResponseForbidden("Get out of here. First buy the course and then come back here...")
-    context = {
-        "lecture": lecture
-    }
-    return render(request, "videoplayer/watchLecture.html", context=context)
+    
+    lecture = get_object_or_404(models.Lecture, id=request.GET.get("id"))
+    course = lecture.partOfCourse
+
+    if request.user not in list(course.accessibleBy.all()):
+        return redirect(
+            "buy-course",
+            course_uuid=course.uuid,
+        )
+    
+
+    return render(request, "videoplayer/watchLecture.html", {"lecture": lecture})
 
 
 @xframe_options_exempt
@@ -117,6 +122,8 @@ def createCourse(request):
             course.save()
             course.accessibleBy.add(request.user)
             course.save()
+            from chat.models import Group
+            group = Group.objects.create(name=course.uuid)
             return render(request, "videoplayer/createCourse.html", {"form": form, "success": True})
     else:
         form = CourseForm()
@@ -131,7 +138,8 @@ def createLecture(request):
         form.fields['partOfCourse'].queryset = models.Course.objects.filter(owner=request.user)
         if form.is_valid():
             form.save()
-            return render(request, "videoplayer/createLecture.html", {"form": form, "success": True})
+            # return render(request, "videoplayer/createLecture.html", {"form": form, "success": True})
+            return redirect("main:dashboard")
     else:
         form = LectureForm()
         form.fields['partOfCourse'].queryset = models.Course.objects.filter(owner=request.user)

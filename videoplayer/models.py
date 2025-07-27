@@ -25,7 +25,7 @@ class Lecture(models.Model):
     isPrivate = models.BooleanField(default=False)
     partOfCourse = models.ForeignKey(Course,on_delete=models.CASCADE,related_name="lectures")
     videoFile = models.FileField(upload_to='videos/')
-    transcriptionData = models.TextField(default=None)
+    transcriptionData = models.TextField(default="")
     thumbnail = models.FileField(upload_to='thumbnails/',null=True)
     def __str__(self):
         return self.title
