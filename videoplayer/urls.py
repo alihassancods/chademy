@@ -28,5 +28,8 @@ urlpatterns = [
     path("courses/",views.allCourses,name="allCourses"),
     path("course/",views.viewCourse,name="viewCourse"),
     path("lecture/",views.watchLecture,name="watchLecture"),
+path("create/", views.createChooser, name="create"),
+path("create/course", views.createCourse, name="createCourse"),
+path("create/lecture", views.createLecture, name="createLecture"),
 
 ]

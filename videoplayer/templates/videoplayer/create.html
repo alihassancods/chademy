@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create | Chademy</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #ffffff;
+            padding: 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 900px;
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        h1 {
+            color: #000000;
+            margin-bottom: 40px;
+            font-size: 2.2em;
+            font-weight: 500;
+            letter-spacing: -0.5px;
+        }
+
+        .options-container {
+            display: flex;
+            gap: 40px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .option-card {
+            background: #ffffff;
+            border: 1px solid #e0e0e0;
+            padding: 35px;
+            width: 380px;
+            transition: all 0.2s ease;
+            position: relative;
+        }
+
+        .option-card:hover {
+            border-color: #000000;
+        }
+
+        .option-card h2 {
+            color: #000000;
+            margin-bottom: 15px;
+            font-size: 1.5em;
+            font-weight: 500;
+        }
+
+        .option-card p {
+            color: #555555;
+            margin-bottom: 25px;
+            line-height: 1.6;
+            font-size: 0.95em;
+        }
+
+        .create-btn {
+            display: inline-block;
+            padding: 12px 28px;
+            background: #ffffff;
+            color: #000000;
+            text-decoration: none;
+            border: 1px solid #000000;
+            font-weight: 400;
+            font-size: 0.9em;
+            transition: all 0.2s ease;
+        }
+
+        .create-btn:hover {
+            background: #000000;
+            color: #ffffff;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            
+            .option-card {
+                width: 100%;
+                max-width: 380px;
+            }
+
+            h1 {
+                font-size: 1.8em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Choose what to create</h1>
+        <div class="options-container">
+            <div class="option-card">
+                <h2>Course</h2>
+                <p>Create a new course from scratch. Set up your course structure, add a description, and prepare it for adding lectures.</p>
+                <a href="{% url 'videoplayer:createCourse' %}" class="create-btn">Create a course</a>
+            </div>
+            <div class="option-card">
+                <h2>Lecture</h2>
+                <p>Add a new lecture to one of your existing courses. Upload video content and organize your course materials.</p>
+                <a href="{% url 'videoplayer:createLecture' %}" class="create-btn">Create a lecture</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
