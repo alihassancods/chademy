@@ -75,7 +75,7 @@ class GroupConsumer(AsyncWebsocketConsumer):
 
     @database_sync_to_async
     def save_group(self, text):
-        group = Group.objects.get(name=self.group_name)
+        group, created = Group.objects.get_or_create(name=self.group_name)
         msg =  GroupMessage.objects.create(
             author=self.scope["user"],
             group=group,
