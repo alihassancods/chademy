@@ -99,11 +99,15 @@ def stream_video(request, lecture_id):
     except models.Lecture.DoesNotExist:
         return HttpResponseForbidden("Access Denied")
     
-
+# HACK : TRANSPORT THESE FUNCTIONS TO DASHBOARD INSTEAD OF BEING PLACED HERE
 def createChooser(request):
+    if not request.user.is_authenticated:
+        return redirect("google_login")
     return render(request, "videoplayer/create.html")
 
 def createCourse(request):
+    if not request.user.is_authenticated:
+        return redirect("google_login")
     if request.method == 'POST':
         form = CourseForm(request.POST)
         if form.is_valid():
@@ -114,6 +118,8 @@ def createCourse(request):
     return render(request, "videoplayer/createCourse.html", {"form": form})
 
 def createLecture(request):
+    if not request.user.is_authenticated:
+        return redirect("google_login")
     if request.method == 'POST':
         form = LectureForm(request.POST, request.FILES)
         if form.is_valid():
