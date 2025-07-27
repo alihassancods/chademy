@@ -10,12 +10,13 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: Arial, sans-serif;
         }
 
         body {
-            background-color: #0f0f0f;
-            color: #fff;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
+            color: #ffffff;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            min-height: 100vh;
         }
 
         .container {
@@ -24,71 +25,176 @@
             gap: 24px;
             max-width: 1800px;
             margin: 0 auto;
+            min-height: calc(100vh - 48px);
         }
 
         .main-content {
             flex: 1;
+            display: flex;
+            flex-direction: column;
         }
 
         .video-container {
             width: 100%;
-            background: #000;
-            border-radius: 12px;
+            background: linear-gradient(145deg, #1e1e1e, #2a2a2a);
+            border-radius: 16px;
             overflow: hidden;
             margin-bottom: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), 
+                        0 0 20px rgba(62, 166, 255, 0.1);
+            position: relative;
+        }
+
+        .video-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, 
+                transparent 0%, 
+                rgba(62, 166, 255, 0.05) 50%, 
+                transparent 100%);
+            pointer-events: none;
+            z-index: 1;
         }
 
         video {
             width: 100%;
             aspect-ratio: 16/9;
             display: block;
+            position: relative;
+            z-index: 2;
         }
 
         .video-info {
             padding: 20px 0;
+            background: rgba(255, 255, 255, 0.02);
+            backdrop-filter: blur(10px);
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
         }
 
         .video-title {
-            font-size: 20px;
-            font-weight: bold;
-            margin-bottom: 12px;
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            background: linear-gradient(135deg, #ffffff, #e0e0e0);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
 
         .video-stats {
-            color: #aaa;
+            color: #b0b0b0;
             font-size: 14px;
-            margin-bottom: 16px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
         }
 
         .video-description {
-            background: #272727;
-            padding: 12px;
-            border-radius: 8px;
-            margin-top: 16px;
-            font-size: 14px;
-            line-height: 1.5;
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(10px);
+            padding: 20px;
+            border-radius: 12px;
+            font-size: 15px;
+            line-height: 1.6;
+            border: 1px solid rgba(255, 255, 255, 0.08);
         }
 
         .course-link {
             color: #3ea6ff;
             text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            padding: 4px 8px;
+            border-radius: 6px;
+            background: rgba(62, 166, 255, 0.1);
         }
 
         .course-link:hover {
-            text-decoration: underline;
+            background: rgba(62, 166, 255, 0.2);
+            transform: translateY(-1px);
         }
 
-        .playlist {
-            width: 400px;
-            background: #272727;
-            border-radius: 12px;
-            padding: 16px;
+        .sidebar {
+            width: 420px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
         }
 
-        .playlist-title {
+        .sidebar-section {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(20px);
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .sidebar-section:hover {
+            border-color: rgba(62, 166, 255, 0.3);
+            box-shadow: 0 8px 32px rgba(62, 166, 255, 0.1);
+        }
+
+        .section-header {
+            padding: 20px;
+            cursor: pointer;
+            display: flex;
+            justify-content: between;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.02);
+            transition: all 0.3s ease;
+            user-select: none;
+        }
+
+        .section-header:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .section-title {
             font-size: 16px;
-            font-weight: bold;
-            margin-bottom: 16px;
+            font-weight: 600;
+            flex: 1;
+        }
+
+        .section-toggle {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: rgba(62, 166, 255, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            color: #3ea6ff;
+            font-size: 14px;
+        }
+
+        .section-toggle.expanded {
+            transform: rotate(180deg);
+            background: rgba(62, 166, 255, 0.3);
+        }
+
+        .section-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .section-content.expanded {
+            max-height: 400px;
+        }
+
+        .section-content-inner {
+            padding: 20px;
         }
 
         .playlist-items {
@@ -96,92 +202,251 @@
             display: flex;
             flex-direction: column;
             gap: 12px;
-            max-height: calc(100vh - 100px);
+            max-height: 500px;
             overflow-y: auto;
+            padding-right: 8px;
+        }
+
+        .playlist-items::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .playlist-items::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 3px;
+        }
+
+        .playlist-items::-webkit-scrollbar-thumb {
+            background: rgba(62, 166, 255, 0.3);
+            border-radius: 3px;
+        }
+
+        .playlist-items::-webkit-scrollbar-thumb:hover {
+            background: rgba(62, 166, 255, 0.5);
         }
 
         .playlist-item {
             display: flex;
             gap: 12px;
-            padding: 8px;
-            border-radius: 8px;
+            padding: 12px;
+            border-radius: 12px;
             cursor: pointer;
-            transition: background-color 0.2s;
+            transition: all 0.3s ease;
+            border: 1px solid transparent;
         }
 
         .playlist-item:hover {
-            background-color: #383838;
+            background: rgba(255, 255, 255, 0.05);
+            border-color: rgba(62, 166, 255, 0.2);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
         }
 
         .playlist-item.active {
-            background-color: #383838;
+            background: rgba(62, 166, 255, 0.1);
+            border-color: rgba(62, 166, 255, 0.3);
+            box-shadow: 0 4px 20px rgba(62, 166, 255, 0.2);
+        }
+
+        .videoinlist {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            width: 100%;
+        }
+
+        .thumbnail {
+            width: 120px;
+            flex-shrink: 0;
+            position: relative;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .thumbnail img {
+            width: 100%;
+            height: 68px;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .playlist-item:hover .thumbnail img {
+            transform: scale(1.05);
+        }
+
+        .playlist-item-info {
+            flex: 1;
+            min-width: 0;
         }
 
         .playlist-item-title {
             font-size: 14px;
-            margin-bottom: 4px;
+            font-weight: 500;
+            margin-bottom: 8px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            line-height: 1.4;
         }
 
         .watch-btn {
-            background: #3ea6ff;
+            background: linear-gradient(135deg, #3ea6ff, #5bb3ff);
             color: #000;
             border: none;
             padding: 8px 16px;
-            border-radius: 18px;
+            border-radius: 20px;
             cursor: pointer;
-            font-weight: bold;
-            transition: background-color 0.2s;
+            font-weight: 600;
+            font-size: 12px;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(62, 166, 255, 0.3);
         }
 
         .watch-btn:hover {
-            background-color: #65b8ff;
+            background: linear-gradient(135deg, #5bb3ff, #7cc7ff);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(62, 166, 255, 0.4);
         }
-        .videoinlist{
+
+        /* Transcript Section */
+        .transcript-content {
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 8px;
+            padding: 16px;
+            max-height: 300px;
+            overflow-y: auto;
+            font-size: 14px;
+            line-height: 1.6;
+            color: #e0e0e0;
+        }
+
+        .transcript-item {
+            margin-bottom: 12px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .transcript-time {
+            color: #3ea6ff;
+            font-size: 12px;
+            font-weight: 500;
+            margin-bottom: 4px;
+        }
+
+        /* Chat Section */
+        .chat-messages {
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 8px;
+            padding: 16px;
+            max-height: 250px;
+            overflow-y: auto;
+            margin-bottom: 16px;
+        }
+
+        .chat-message {
+            margin-bottom: 12px;
+            padding: 8px 12px;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.03);
+        }
+
+        .chat-user {
+            color: #3ea6ff;
+            font-weight: 600;
+            font-size: 12px;
+            margin-bottom: 4px;
+        }
+
+        .chat-text {
+            font-size: 14px;
+            line-height: 1.4;
+        }
+
+        .chat-input-container {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .chat-input {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 12px 16px;
+            color: #fff;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .chat-input:focus {
+            outline: none;
+            border-color: rgba(62, 166, 255, 0.5);
+            background: rgba(255, 255, 255, 0.08);
+            box-shadow: 0 0 0 3px rgba(62, 166, 255, 0.1);
+        }
+
+        .chat-input::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .chat-send-btn {
+            background: linear-gradient(135deg, #3ea6ff, #5bb3ff);
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
             display: flex;
             align-items: center;
-            gap: 10px;
-            padding-left: 15px;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: #000;
+            font-weight: bold;
         }
-        .thumbnail {
-    width: 120px;
-    flex-shrink: 0;
-}
 
-.thumbnail img {
-    width: 100%;
-    height: 68px; /* 16:9 aspect ratio for 120px width */
-    object-fit: cover;
-    border-radius: 4px;
-}
+        .chat-send-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 4px 12px rgba(62, 166, 255, 0.4);
+        }
 
-/* Update the videoinlist class */
-.videoinlist {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    width: 100%;
-}
+        /* Responsive Design */
+        @media (max-width: 1200px) {
+            .container {
+                flex-direction: column;
+            }
+            
+            .sidebar {
+                width: 100%;
+            }
+        }
 
-/* Add this new class */
-.playlist-item-info {
-    flex: 1;
-    min-width: 0;
-}
+        /* Connection status indicator */
+        .connection-status {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 12px;
+            color: #888;
+            margin-bottom: 12px;
+        }
 
-.playlist-item-title {
-    font-size: 14px;
-    margin-bottom: 4px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-}
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #ff4444;
+            transition: background-color 0.3s ease;
+        }
+
+        .status-dot.connected {
+            background: #44ff44;
+        }
     </style>
 </head>
 <body>
-    <!-- place in <head> -->
-
     <div class="container">
         <div class="main-content">
             <div class="video-container">
@@ -193,7 +458,10 @@
             <div class="video-info">
                 <h1 class="video-title">{{lecture.title}}</h1>
                 <div class="video-stats">
-                    {{lecture.viewCount}} Views • {{lecture.dateUploaded|date:"F j, Y"}} • 
+                    <span>{{lecture.viewCount}} Views</span>
+                    <span>•</span>
+                    <span>{{lecture.dateUploaded|date:"F j, Y"}}</span>
+                    <span>•</span>
                     <a href="/course?id={{lecture.partOfCourse.id}}" class="course-link">{{lecture.partOfCourse.title}}</a>
                 </div>
                 <div class="video-description">
@@ -202,27 +470,211 @@
             </div>
         </div>
         
-        <div class="playlist">
-            <h2 class="playlist-title">Course Videos</h2>
-            <ul class="playlist-items">
-                {% for video in lecture.partOfCourse.lectures.all %}
-                <li class="playlist-item {% if video.id == lecture.id %}active{% endif %}">
-    <div class="videoinlist">
-        <div class="thumbnail">
-            <img src="/media/{{video.thumbnail.name}}" alt="{{video.title}}">
-        </div>
-        <div class="playlist-item-info">
-            <p class="playlist-item-title">{{video.title}}</p>
-            <a href="/lecture?id={{video.id}}">
-                <button class="watch-btn">Watch</button>
-            </a>
-        </div>
-    </div>
-</li>
-                {% endfor %}
-            </ul>
+        <div class="sidebar">
+            <!-- Course Videos Section -->
+            <div class="sidebar-section">
+                <div class="section-header" onclick="toggleSection('playlist')">
+                    <h2 class="section-title">Course Videos</h2>
+                    <div class="section-toggle expanded" id="playlist-toggle">▼</div>
+                </div>
+                <div class="section-content expanded" id="playlist-content">
+                    <div class="section-content-inner">
+                        <ul class="playlist-items">
+                            {% for video in lecture.partOfCourse.lectures.all %}
+                            <li class="playlist-item {% if video.id == lecture.id %}active{% endif %}">
+                                <div class="videoinlist">
+                                    <div class="thumbnail">
+                                        <img src="/media/{{video.thumbnail.name}}" alt="{{video.title}}">
+                                    </div>
+                                    <div class="playlist-item-info">
+                                        <p class="playlist-item-title">{{video.title}}</p>
+                                        <a href="/lecture?id={{video.id}}">
+                                            <button class="watch-btn">Watch</button>
+                                        </a>
+                                    </div>
+                                </div>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Transcript Section -->
+            <div class="sidebar-section">
+                <div class="section-header" onclick="toggleSection('transcript')">
+                    <h2 class="section-title">Transcript</h2>
+                    <div class="section-toggle" id="transcript-toggle">▼</div>
+                </div>
+                <div class="section-content" id="transcript-content">
+                    <div class="section-content-inner">
+                        <div class="transcript-content" id="transcript-messages">
+                            <div class="transcript-item">
+                                <div class="transcript-time">00:00</div>
+                                <div class="transcript-text">Welcome to today's lecture on {{lecture.title}}...</div>
+                            </div>
+                            <div class="transcript-item">
+                                <div class="transcript-time">00:15</div>
+                                <div class="transcript-text">In this session, we'll be exploring the fundamental concepts...</div>
+                            </div>
+                            <!-- More transcript items will be populated dynamically -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Chat Section -->
+            <div class="sidebar-section">
+                <div class="section-header" onclick="toggleSection('chat')">
+                    <h2 class="section-title">Live Chat</h2>
+                    <div class="section-toggle" id="chat-toggle">▼</div>
+                </div>
+                <div class="section-content" id="chat-content">
+                    <div class="section-content-inner">
+                        <div class="connection-status">
+                            <div class="status-dot" id="connection-dot"></div>
+                            <span id="connection-text">Connecting...</span>
+                        </div>
+                        <div class="chat-messages" id="chat-messages">
+                            <div class="chat-message">
+                                <div class="chat-user">Teacher</div>
+                                <div class="chat-text">Welcome everyone! Feel free to ask questions during the lecture.</div>
+                            </div>
+                            <div class="chat-message">
+                                <div class="chat-user">Student1</div>
+                                <div class="chat-text">Thank you for the clear explanation!</div>
+                            </div>
+                        </div>
+                        <div class="chat-input-container">
+                            <input type="text" class="chat-input" id="chat-input" placeholder="Type your message..." maxlength="500">
+                            <button class="chat-send-btn" id="chat-send" onclick="sendMessage()">→</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
+    <script>
+        // WebSocket connection for real-time chat
+        let chatSocket = null;
+        let isConnected = false;
+
+        // Initialize WebSocket connection
+        function initializeChat() {
+            const lectureId = '{{ lecture.partOfCourse.uuid }}';
+            const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+            const wsUrl = `${protocol}//${window.location.host}/ws/chat/${lectureId}/`;
+            
+            chatSocket = new WebSocket(wsUrl);
+            
+            chatSocket.onopen = function(e) {
+                isConnected = true;
+                updateConnectionStatus('Connected', true);
+            };
+            
+            chatSocket.onmessage = function(e) {
+                const data = JSON.parse(e.data);
+                addChatMessage(data.user, data.message, data.timestamp);
+            };
+            
+            chatSocket.onclose = function(e) {
+                isConnected = false;
+                updateConnectionStatus('Disconnected', false);
+                // Attempt to reconnect after 3 seconds
+                setTimeout(initializeChat, 3000);
+            };
+            
+            chatSocket.onerror = function(e) {
+                isConnected = false;
+                updateConnectionStatus('Connection Error', false);
+            };
+        }
+
+        // Update connection status indicator
+        function updateConnectionStatus(text, connected) {
+            const statusDot = document.getElementById('connection-dot');
+            const statusText = document.getElementById('connection-text');
+            
+            statusDot.className = `status-dot ${connected ? 'connected' : ''}`;
+            statusText.textContent = text;
+        }
+
+        // Add message to chat
+        function addChatMessage(user, message, timestamp) {
+            const chatMessages = document.getElementById('chat-messages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'chat-message';
+            
+            messageDiv.innerHTML = `
+                <div class="chat-user">${user}</div>
+                <div class="chat-text">${message}</div>
+            `;
+            
+            chatMessages.appendChild(messageDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        // Send message
+        function sendMessage() {
+            const input = document.getElementById('chat-input');
+            const message = input.value.trim();
+            
+            if (message && isConnected) {
+                chatSocket.send(JSON.stringify({
+                    'message': message,
+                    'type': 'chat_message'
+                }));
+                input.value = '';
+            } else if (!isConnected) {
+                alert('Chat is not connected. Please wait for reconnection.');
+            }
+        }
+
+        // Handle Enter key in chat input
+        document.getElementById('chat-input').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                sendMessage();
+            }
+        });
+
+        // Toggle section visibility
+        function toggleSection(sectionName) {
+            const content = document.getElementById(`${sectionName}-content`);
+            const toggle = document.getElementById(`${sectionName}-toggle`);
+            
+            if (content.classList.contains('expanded')) {
+                content.classList.remove('expanded');
+                toggle.classList.remove('expanded');
+            } else {
+                content.classList.add('expanded');
+                toggle.classList.add('expanded');
+            }
+        }
+
+        // Simulate transcript updates (this would be real-time in production)
+        function updateTranscript() {
+            // This would connect to a real transcript service
+            // For demo purposes, we'll leave it static
+        }
+
+        // Initialize when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeChat();
+            
+            // Auto-scroll chat to bottom
+            const chatMessages = document.getElementById('chat-messages');
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        });
+
+        // Handle video time updates for transcript synchronization
+        const video = document.querySelector('video');
+        if (video) {
+            video.addEventListener('timeupdate', function() {
+                // Here you would sync the transcript with video time
+                // This would highlight the current transcript segment
+            });
+        }
+    </script>
 </body>
 </html>
