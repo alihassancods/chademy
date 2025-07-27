@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Group List</title>
+</head>
+<body>
+    <h1>Groups</h1>
+    <ul>
+        {% for group in groups %}
+            <li>{{ group.name }}</li>
+        {% empty %}
+            <li>No groups available.</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
