@@ -32,9 +32,10 @@ def viewCourse(request):
 def watchLecture(request):
     if not request.user.is_authenticated:
         return redirect("google_login")
-
     lectureID = request.GET.get("id")
     lecture = models.Lecture.objects.get(id=lectureID)
+    if not request.user in lecture.partOfCourse.accessibleBy.all():
+        return HttpResponseForbidden("Get out of here. First buy the course and then come back here...")
     context = {
         "lecture": lecture
     }
@@ -113,6 +114,8 @@ def createCourse(request):
         if form.is_valid():
             course = form.save(commit=False)
             course.owner = request.user
+            course.save()
+            course.accessibleBy.add(request.user)
             course.save()
             return render(request, "videoplayer/createCourse.html", {"form": form, "success": True})
     else:
